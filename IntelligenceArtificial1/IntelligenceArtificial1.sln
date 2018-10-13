@@ -1,0 +1,23 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2046
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "IntelligenceArtificial1", "IntelligenceArtificial1\IntelligenceArtificial1.pyproj", "{A654EB37-10F9-4B27-8EEA-38A872CD920A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A654EB37-10F9-4B27-8EEA-38A872CD920A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A654EB37-10F9-4B27-8EEA-38A872CD920A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {833DC1E7-205F-4A8E-BF57-9BC51B3E0E53}
+	EndGlobalSection
+EndGlobal
