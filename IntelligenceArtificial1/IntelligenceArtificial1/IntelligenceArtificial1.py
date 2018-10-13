@@ -1,12 +1,21 @@
+import copy
+
 ##Global Constants
-WIDTH = 5
-HEIGHT = 5
+N = 5
+M = 5
 
 def main():
-    pos = make_pos(1,0)
-    print(pos)
-    pos_a = pos_l(pos)
-    print(pos_a)
+    board = [["X","X","O","O","O","O","O","X","X"],
+ ["X","X","O","O","O","O","O","X","X"],
+ ["O","O","O","O","O","O","O","O","O"],
+ ["O","O","O","O","O","O","O","O","O"],
+ ["O","O","O","O","_","O","O","O","O"],
+ ["O","O","O","O","O","O","O","O","O"],
+ ["O","O","O","O","O","O","O","O","O"],
+ ["X","X","O","O","O","O","O","X","X"],
+ ["X","X","O","O","O","O","O","X","X"]]     board1 =  [['O','_','_','O','_'], ['O','_','O','_','O'], ['_','O','_','O','_'],
+ ['O','_','O','_','_'], ['_','O','_','_','_']]     board2 = [["_","O","O","O","_"], ["O","_","O","_","O"], ["_","O","_","O","_"],
+ ["O","_","O","_","_"], ["_","O","_","_","_"]]     print(board_perform_move(board2, [(0, 2), (0, 0)]))
 
 
 # TAI content
@@ -48,25 +57,25 @@ def board_moves (board) :
     for l in range(len(board)) :
         for c in range(len(board[l])) :
 
+            # RIGHT to LEFT
+            if (c - 2 ) >= 0 :
+                if is_peg(board[l][c]) and is_peg(board[l][c - 1]) and is_empty(board[l][c - 2]) :
+                    addSolutionFound(make_pos(l, c), make_pos(l, c - 2), listSolutionFound)
+
             # LEFT to RIGHT
             if (c + 2 ) < N :
                 if is_peg(board[l][c]) and is_peg(board[l][c + 1]) and is_empty(board[l][c + 2]) :
-                    addSolutionFound(make_pos(l, c), make_pos(1, c + 2), listSolutionFound)
+                    addSolutionFound(make_pos(l, c), make_pos(l, c + 2), listSolutionFound)
 
-            # RIGHT to LEFT
-            if (c - 2 ) < 0 :
-                if is_peg(board[l][c]) and is_peg(board[l][c - 1]) and is_empty(board[l][c - 2]) :
-                    addSolutionFound(make_pos(l, c), make_pos(l, c - 2), listSolutionFound)
+            # BOTTOM to TOP
+            if (l - 2 ) >= 0 :
+                if is_peg(board[l][c]) and is_peg(board[l - 1][c]) and is_empty(board[l - 2][c]) :
+                    addSolutionFound(make_pos(l, c), make_pos(l - 2, c), listSolutionFound)
 
             # TOP to BOTTOM
             if (l + 2 ) < M :
                 if is_peg(board[l][c]) and is_peg(board[l + 1][c]) and is_empty(board[l + 2][c]) :
                     addSolutionFound(make_pos(l, c), make_pos(l + 2, c), listSolutionFound)
-
-            # BOTTOM to TOP
-            if (l - 2 ) < 0 :
-                if is_peg(board[l][c]) and is_peg(board[l - 1][c]) and is_empty(board[l - 2][c]) :
-                    addSolutionFound(make_pos(l, c), make_pos(l - 2, c), listSolutionFound)
 
     return listSolutionFound
 
@@ -75,10 +84,10 @@ def addSolutionFound(initialPos, finalPos, listSolutionFound) :
     listSolutionFound.append(solutionFound)
 
 def board_perform_move(board, move) :
-      new_board = board.copy();
+      new_board = copy.deepcopy(board)
 
-      l_middle_pos = abs(move[0][0] - move[1][0])
-      c_middle_pos = abs(move[0][1] - move[1][1])
+      l_middle_pos = int (((move[0][0] + move[1][0]) / 2))
+      c_middle_pos = int (((move[0][1] + move[1][1]) / 2))
       middle_pos = make_pos(l_middle_pos, c_middle_pos)
 
       #the ball in the original position moves
