@@ -2,6 +2,13 @@
 WIDTH = 5
 HEIGHT = 5
 
+def main():
+    pos = make_pos(1,0)
+    print(pos)
+    pos_a = pos_l(pos)
+    print(pos_a)
+
+
 # TAI content
 def c_peg () :
     return "O"
@@ -83,7 +90,7 @@ def board_perform_move(board, move) :
 
       return new_board
 
-
+main()
 
 
     
