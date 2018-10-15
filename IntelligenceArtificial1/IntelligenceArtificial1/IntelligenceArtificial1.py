@@ -1,4 +1,4 @@
-import copye
+import copy
 from search import (
     Problem
 )
@@ -16,9 +16,17 @@ def main():
  ["O","O","O","O","O","O","O","O","O"],
  ["O","O","O","O","O","O","O","O","O"],
  ["X","X","O","O","O","O","O","X","X"],
- ["X","X","O","O","O","O","O","X","X"]]     board1 =  [['O','_','_','O','_'], ['O','_','O','_','O'], ['_','O','_','O','_'],
- ['O','_','O','_','_'], ['_','O','_','_','_']]     board2 = [["_","O","O","O","_"], ["O","_","O","_","O"], ["_","O","_","O","_"],
- ["O","_","O","_","_"], ["_","O","_","_","_"]]     print(board_perform_move(board2, [(0, 2), (0, 0)]))
+ ["X","X","O","O","O","O","O","X","X"]] 
+
+    board1 =  [['O','_','_','O','_'], ['O','_','O','_','O'], ['_','O','_','O','_'],
+ ['O','_','O','_','_'], ['_','O','_','_','_']] 
+
+    board2 = [["_","O","O","O","_"], ["O","_","O","_","O"], ["_","O","_","O","_"],
+ ["O","_","O","_","_"], ["_","O","_","_","_"]] 
+
+
+    print(board_perform_move(board2, [(0, 2), (0, 0)]))
+
 
 class Solitaire(Problem) :
  """Models a Solitaire problem as a satisfaction problem.
@@ -42,7 +50,9 @@ class Solitaire(Problem) :
  def path_cost(self, c, state1, action, state2):
     raise NotImplementedError
 
- def h(self, node):    raise NotImplementedError
+ def h(self, node):
+    raise NotImplementedError
+
 class sol_state :
     def __init__(self, board) :
         """The board is a 2 dimensional array whose state is specified by string caracter"""
