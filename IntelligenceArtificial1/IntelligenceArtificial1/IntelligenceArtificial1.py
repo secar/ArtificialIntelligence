@@ -1,4 +1,7 @@
-import copy
+import copye
+from search import (
+    Problem
+)
 
 ##Global Constants
 N = 5
@@ -16,6 +19,40 @@ def main():
  ["X","X","O","O","O","O","O","X","X"]]     board1 =  [['O','_','_','O','_'], ['O','_','O','_','O'], ['_','O','_','O','_'],
  ['O','_','O','_','_'], ['_','O','_','_','_']]     board2 = [["_","O","O","O","_"], ["O","_","O","_","O"], ["_","O","_","O","_"],
  ["O","_","O","_","_"], ["_","O","_","_","_"]]     print(board_perform_move(board2, [(0, 2), (0, 0)]))
+
+class Solitaire(Problem) :
+ """Models a Solitaire problem as a satisfaction problem.
+ A solution cannot have more than 1 peg left on the board."""
+ def __init__(self, board):
+    """The board is a 2 dimensional array/list whose state is specified by string caracter"""
+    self.initial = board
+    self.state = sol_state(board)
+
+ def actions(self, state):
+    """The list of possible moves, from the state of a board"""
+    return board_moves(state.board)
+ 
+ def result(self, state, action):
+    new_board = board_perform_move(state, action)
+    return sol_state(new_board)
+
+ def goal_test(self, state):
+    raise NotImplementedError
+
+ def path_cost(self, c, state1, action, state2):
+    raise NotImplementedError
+
+ def h(self, node):    raise NotImplementedError
+class sol_state :
+    def __init__(self, board) :
+        """The board is a 2 dimensional array whose state is specified by string caracter"""
+        self.board = board
+        self.n = len(board)
+        assert self.n > 0
+        self.m = len(board[0])
+        assert self.m > 0
+    def __lt__(self, sol_state):
+        return self.state < sol_state.state
 
 
 # TAI content
