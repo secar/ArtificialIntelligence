@@ -3,36 +3,29 @@ from search import (
     Problem
 )
 
-##Global Constants
-
-
 def main():
+    print(solitaire([["X","O","_","O","X"],["O","_","_","_","O"],["_","_","_","_","O"],["O","O","_","_","O"],["X","O","O","O","X"]]).result(sol_state([["X","O","_","O","X"],["O","_","_","_","O"],["_","_","_","_","O"],["O","O","_","_","O"],["X","O","O","O","X"]]),[(3, 0), (3, 2)]).board)
 
-   print(board_perform_move([["_","O","O","O","_"],["O","_","O","O","O"],["_","O","_","O","_"],["O","_","O","_","_"],["_","O","_","_","_"]], [(1, 3), (1, 1)]))
-
-
-
-class Solitaire(Problem) :
+class solitaire(Problem) :
  """Models a Solitaire problem as a satisfaction problem.
  A solution cannot have more than 1 peg left on the board."""
  def __init__(self, board):
     """The board is a 2 dimensional array/list whose state is specified by string caracter"""
-    self.initial = board
-    self.state = sol_state(board)
+    self.initial = sol_state(board)
 
  def actions(self, state):
     """The list of possible moves, from the state of a board"""
     return board_moves(state.board)
  
  def result(self, state, action):
-    new_board = board_perform_move(state, action)
+    new_board = board_perform_move(state.board, action)
     return sol_state(new_board)
 
  def goal_test(self, state):
-    raise NotImplementedError
+    return isGoalReached(state.board)
 
  def path_cost(self, c, state1, action, state2):
-    raise NotImplementedError
+    return c + 1
 
  def h(self, node):
     raise NotImplementedError
@@ -46,7 +39,7 @@ class sol_state :
         self.m = len(board[0])
         assert self.m > 0
     def __lt__(self, sol_state):
-        return self.state < sol_state.state
+        return sol_state.board < sol_state.board
 
 
 # TAI content
@@ -87,8 +80,8 @@ def board_moves (board) :
     listSolutionFound = []
     N = len(board)
     M = len(board[0])
-    for l in range(len(board)) :
-        for c in range(len(board[l])) :
+    for l in range(N) :
+        for c in range(M) :
 
             # RIGHT to LEFT
             if (c - 2) >= 0 :
@@ -117,6 +110,7 @@ def addSolutionFound(initialPos, finalPos, listSolutionFound) :
     solutionFound = make_move(initialPos, finalPos)
     listSolutionFound.append(solutionFound)
 
+#TAI List[List[c]]
 def board_perform_move(board, move) :
       new_board = copy.deepcopy(board)
 
@@ -132,6 +126,19 @@ def board_perform_move(board, move) :
       new_board[middle_pos[0]][middle_pos[1]] = c_empty()
 
       return new_board
+
+#TAI boolean
+def isGoalReached(board):
+  #The goal is reached when there is only one peg left on the board
+  count = 0
+  for l in range(len(board)) :
+      for c in range(len(board[0])) :
+          if is_peg(board[l][c]):
+              count += 1
+              if count > 1:
+                return False
+      else: # The count must be 1
+              return True 
 
 main()
 
