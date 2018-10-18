@@ -23,6 +23,9 @@
   <ItemGroup>
     <Compile Include="IntelligenceArtificial1.py" />
     <Compile Include="search.py" />
+    <Compile Include="unit_test.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="utils.py" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />

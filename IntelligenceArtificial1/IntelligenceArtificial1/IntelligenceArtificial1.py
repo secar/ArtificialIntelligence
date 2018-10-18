@@ -4,28 +4,12 @@ from search import (
 )
 
 ##Global Constants
-N = 5
-M = 5
+
 
 def main():
-    board = [["X","X","O","O","O","O","O","X","X"],
- ["X","X","O","O","O","O","O","X","X"],
- ["O","O","O","O","O","O","O","O","O"],
- ["O","O","O","O","O","O","O","O","O"],
- ["O","O","O","O","_","O","O","O","O"],
- ["O","O","O","O","O","O","O","O","O"],
- ["O","O","O","O","O","O","O","O","O"],
- ["X","X","O","O","O","O","O","X","X"],
- ["X","X","O","O","O","O","O","X","X"]] 
 
-    board1 =  [['O','_','_','O','_'], ['O','_','O','_','O'], ['_','O','_','O','_'],
- ['O','_','O','_','_'], ['_','O','_','_','_']] 
+   print(board_perform_move([["_","O","O","O","_"],["O","_","O","O","O"],["_","O","_","O","_"],["O","_","O","_","_"],["_","O","_","_","_"]], [(1, 3), (1, 1)]))
 
-    board2 = [["_","O","O","O","_"], ["O","_","O","_","O"], ["_","O","_","O","_"],
- ["O","_","O","_","_"], ["_","O","_","_","_"]] 
-
-
-    print(board_perform_move(board2, [(0, 2), (0, 0)]))
 
 
 class Solitaire(Problem) :
@@ -101,26 +85,29 @@ def move_final (move) :
 # Lista [Lista_l [c]]
 def board_moves (board) :
     listSolutionFound = []
+    N = len(board)
+    M = len(board[0])
     for l in range(len(board)) :
         for c in range(len(board[l])) :
 
             # RIGHT to LEFT
-            if (c - 2 ) >= 0 :
+            if (c - 2) >= 0 :
                 if is_peg(board[l][c]) and is_peg(board[l][c - 1]) and is_empty(board[l][c - 2]) :
                     addSolutionFound(make_pos(l, c), make_pos(l, c - 2), listSolutionFound)
 
             # LEFT to RIGHT
-            if (c + 2 ) < N :
+            if (c + 2) < M :
                 if is_peg(board[l][c]) and is_peg(board[l][c + 1]) and is_empty(board[l][c + 2]) :
                     addSolutionFound(make_pos(l, c), make_pos(l, c + 2), listSolutionFound)
 
             # BOTTOM to TOP
-            if (l - 2 ) >= 0 :
+            if (l - 2) >= 0 :
                 if is_peg(board[l][c]) and is_peg(board[l - 1][c]) and is_empty(board[l - 2][c]) :
                     addSolutionFound(make_pos(l, c), make_pos(l - 2, c), listSolutionFound)
 
             # TOP to BOTTOM
-            if (l + 2 ) < M :
+            u = len(board)
+            if (l + 2) < N :
                 if is_peg(board[l][c]) and is_peg(board[l + 1][c]) and is_empty(board[l + 2][c]) :
                     addSolutionFound(make_pos(l, c), make_pos(l + 2, c), listSolutionFound)
 
