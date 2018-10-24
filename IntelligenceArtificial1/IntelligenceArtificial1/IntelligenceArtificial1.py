@@ -111,7 +111,6 @@ def top_to_bottom(board, pos):
     if l3 < N and is_peg(board[l2][c]) and is_empty(board[l3][c]):
 	return make_pos(c, l3)
 
-
 # TAI board
 # Lista [Lista_l [c]]
 def board_moves (board) :
@@ -123,8 +122,8 @@ def board_moves (board) :
 	    pos = make_pos(l, c)
             for f in left_to_right, right_to_left, bottom_to_top, top_to_bottom:
                 newpos = f(board, pos)
-            if newpos:
-                addSolutionFound(pos, newpos, listSolutionFound)
+                if newpos:
+                    addSolutionFound(pos, newpos, listSolutionFound)
     return listSolutionFound
 
 def addSolutionFound(initialPos, finalPos, listSolutionFound):
