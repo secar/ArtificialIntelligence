@@ -134,8 +134,8 @@ def addSolutionFound(initialPos, finalPos, listSolutionFound):
 def board_perform_move(board, move) :
       new_board = copy.deepcopy(board)
 
-      l_middle_pos = int (((move[0][0] + move[1][0]) / 2))
-      c_middle_pos = int (((move[0][1] + move[1][1]) / 2))
+      l_middle_pos = (move[0][0] + move[1][0]) // 2
+      c_middle_pos = (move[0][1] + move[1][1]) // 2
       middle_pos = make_pos(l_middle_pos, c_middle_pos)
 
       #the ball in the original position moves
