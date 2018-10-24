@@ -1,17 +1,10 @@
+# Grupo 094: Sérgio Carvalho (81513), Nuno Silva-Pinto ()
+
 import copy
 from search import (
     Problem, InstrumentedProblem, breadth_first_search, Node
 )
 
-def main():
-    game = solitaire([['O','_','_','O','_'], ['O','_','O','_','O'], ['_','O','_','O','_'], ['O','_','O','_','_'], ['_','O','_','_','_']])
-    p = InstrumentedProblem(game)
-    
-   
-
-    resultBreadthFirstSearch = breadth_first_search(p) 
-    print(resultBreadthFirstSearch.solution())
-    print(resultBreadthFirstSearch.path()[0].state.board)
     
 
 class solitaire(Problem) :
@@ -36,7 +29,10 @@ class solitaire(Problem) :
     return c + 1
 
  def h(self, node):
+    # https://stackoverflow.com/questions/6784269/peg-solitaire-senku-solution-algorithm
+    # A primeira resposta é útil.
     raise NotImplementedError
+
 
 class sol_state :
     def __init__(self, board) :
@@ -48,7 +44,6 @@ class sol_state :
         assert self.m > 0
     def __lt__(self, sol_state):
         return sol_state.board < sol_state.board
-
 
 # TAI content
 def c_peg () :
@@ -82,39 +77,57 @@ def move_initial (move) :
 def move_final (move) :
     return move [1]
 
+def right_to_left(board, pos):
+    l = pos_l(pos)
+    c1 = pos_c(pos) # current
+    c2 = c1 + 1     # middce
+    c3 = c2 + 1     # target
+    if c3 >= 0 and is_peg(board[l][c2]) and is_empty(board[l][c3]):
+	return make_pos(c3, l)
+
+def left_to_right(board, pos):
+    M = len(board[0])
+    l = pos_l(pos)
+    c1 = pos_c(pos) # current
+    c2 = c1 + 1     # middle
+    c3 = c2 + 1     # target
+    if c3 < M and is_peg(board[l][c2]) and is_empty(board[l][c3]):
+	return make_pos(c3, l)
+
+def bottom_to_top(board, pos):
+    c = pos_c(pos)
+    l1 = pos_l(pos) # current
+    l2 = l1 - 1     # middle
+    l3 = l2 - 1     # target
+    if l3 >= 0 and is_peg(board[l2][c]) and is_empty(board[l3][c]):
+	return make_pos(c, l3)
+
+def top_to_bottom(board, pos):
+    N = len(board)
+    c = pos_c(pos)
+    l1 = pos_l(pos) # current
+    l2 = l1 + 1     # middle
+    l3 = l2 + 1     # target
+    if l3 < N and is_peg(board[l2][c]) and is_empty(board[l3][c]):
+	return make_pos(c, l3)
+
+
 # TAI board
 # Lista [Lista_l [c]]
 def board_moves (board) :
     listSolutionFound = []
-    N = len(board)
-    M = len(board[0])
-    for l in range(N) :
-        for c in range(M) :
-
-            # RIGHT to LEFT
-            if (c - 2) >= 0 :
-                if is_peg(board[l][c]) and is_peg(board[l][c - 1]) and is_empty(board[l][c - 2]) :
-                    addSolutionFound(make_pos(l, c), make_pos(l, c - 2), listSolutionFound)
-
-            # LEFT to RIGHT
-            if (c + 2) < M :
-                if is_peg(board[l][c]) and is_peg(board[l][c + 1]) and is_empty(board[l][c + 2]) :
-                    addSolutionFound(make_pos(l, c), make_pos(l, c + 2), listSolutionFound)
-
-            # BOTTOM to TOP
-            if (l - 2) >= 0 :
-                if is_peg(board[l][c]) and is_peg(board[l - 1][c]) and is_empty(board[l - 2][c]) :
-                    addSolutionFound(make_pos(l, c), make_pos(l - 2, c), listSolutionFound)
-
-            # TOP to BOTTOM
-            u = len(board)
-            if (l + 2) < N :
-                if is_peg(board[l][c]) and is_peg(board[l + 1][c]) and is_empty(board[l + 2][c]) :
-                    addSolutionFound(make_pos(l, c), make_pos(l + 2, c), listSolutionFound)
-
+    for l in range(N):
+        for c in range(M):
+            if not is_peg(board[l][c]):
+                continue
+	    pos = make_pos(l, c)
+            for f in left_to_right, right_to_left, bottom_to_top, top_to_bottom:
+                newpos = f(board, pos)
+            if newpos:
+                addSolutionFound(pos, newpos, listSolutionFound)
     return listSolutionFound
 
-def addSolutionFound(initialPos, finalPos, listSolutionFound) :
+def addSolutionFound(initialPos, finalPos, listSolutionFound):
     solutionFound = make_move(initialPos, finalPos)
     listSolutionFound.append(solutionFound)
 
@@ -148,17 +161,12 @@ def isGoalReached(board):
       else: # The count must be 1
               return True 
 
+def main():
+    game = solitaire([['O','_','_','O','_'], ['O','_','O','_','O'], ['_','O','_','O','_'], ['O','_','O','_','_'], ['_','O','_','_','_']])
+    p = InstrumentedProblem(game)    
+    # XXX missing code here
+    resultBreadthFirstSearch = breadth_first_search(p) 
+    print(resultBreadthFirstSearch.solution())
+    print(resultBreadthFirstSearch.path()[0].state.board)
+
 main()
-
-
-    
-
-
-
-
-
-
-
-            
-    
-
