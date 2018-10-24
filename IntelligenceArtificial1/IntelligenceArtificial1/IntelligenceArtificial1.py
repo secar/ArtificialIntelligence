@@ -1,10 +1,18 @@
 import copy
 from search import (
-    Problem
+    Problem, InstrumentedProblem, breadth_first_search, Node
 )
 
 def main():
-    print(solitaire([["X","O","_","O","X"],["O","_","_","_","O"],["_","_","_","_","O"],["O","O","_","_","O"],["X","O","O","O","X"]]).result(sol_state([["X","O","_","O","X"],["O","_","_","_","O"],["_","_","_","_","O"],["O","O","_","_","O"],["X","O","O","O","X"]]),[(3, 0), (3, 2)]).board)
+    game = solitaire([['O','_','_','O','_'], ['O','_','O','_','O'], ['_','O','_','O','_'], ['O','_','O','_','_'], ['_','O','_','_','_']])
+    p = InstrumentedProblem(game)
+    
+   
+
+    resultBreadthFirstSearch = breadth_first_search(p) 
+    print(resultBreadthFirstSearch.solution())
+    print(resultBreadthFirstSearch.path()[0].state.board)
+    
 
 class solitaire(Problem) :
  """Models a Solitaire problem as a satisfaction problem.
