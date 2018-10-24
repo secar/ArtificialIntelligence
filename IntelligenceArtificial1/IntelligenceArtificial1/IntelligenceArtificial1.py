@@ -1,54 +1,39 @@
 import copy
 from search import (
-    Problem
+    Problem, InstrumentedProblem, breadth_first_search, Node
 )
 
-##Global Constants
-N = 5
-M = 5
-
 def main():
-    board = [["X","X","O","O","O","O","O","X","X"],
- ["X","X","O","O","O","O","O","X","X"],
- ["O","O","O","O","O","O","O","O","O"],
- ["O","O","O","O","O","O","O","O","O"],
- ["O","O","O","O","_","O","O","O","O"],
- ["O","O","O","O","O","O","O","O","O"],
- ["O","O","O","O","O","O","O","O","O"],
- ["X","X","O","O","O","O","O","X","X"],
- ["X","X","O","O","O","O","O","X","X"]] 
+    game = solitaire([['O','_','_','O','_'], ['O','_','O','_','O'], ['_','O','_','O','_'], ['O','_','O','_','_'], ['_','O','_','_','_']])
+    p = InstrumentedProblem(game)
+    
+   
 
-    board1 =  [['O','_','_','O','_'], ['O','_','O','_','O'], ['_','O','_','O','_'],
- ['O','_','O','_','_'], ['_','O','_','_','_']] 
+    resultBreadthFirstSearch = breadth_first_search(p) 
+    print(resultBreadthFirstSearch.solution())
+    print(resultBreadthFirstSearch.path()[0].state.board)
+    
 
-    board2 = [["_","O","O","O","_"], ["O","_","O","_","O"], ["_","O","_","O","_"],
- ["O","_","O","_","_"], ["_","O","_","_","_"]] 
-
-
-    print(board_perform_move(board2, [(0, 2), (0, 0)]))
-
-
-class Solitaire(Problem) :
+class solitaire(Problem) :
  """Models a Solitaire problem as a satisfaction problem.
  A solution cannot have more than 1 peg left on the board."""
  def __init__(self, board):
     """The board is a 2 dimensional array/list whose state is specified by string caracter"""
-    self.initial = board
-    self.state = sol_state(board)
+    self.initial = sol_state(board)
 
  def actions(self, state):
     """The list of possible moves, from the state of a board"""
     return board_moves(state.board)
  
  def result(self, state, action):
-    new_board = board_perform_move(state, action)
+    new_board = board_perform_move(state.board, action)
     return sol_state(new_board)
 
  def goal_test(self, state):
-    raise NotImplementedError
+    return isGoalReached(state.board)
 
  def path_cost(self, c, state1, action, state2):
-    raise NotImplementedError
+    return c + 1
 
  def h(self, node):
     raise NotImplementedError
@@ -62,7 +47,7 @@ class sol_state :
         self.m = len(board[0])
         assert self.m > 0
     def __lt__(self, sol_state):
-        return self.state < sol_state.state
+        return sol_state.board < sol_state.board
 
 
 # TAI content
@@ -101,26 +86,29 @@ def move_final (move) :
 # Lista [Lista_l [c]]
 def board_moves (board) :
     listSolutionFound = []
-    for l in range(len(board)) :
-        for c in range(len(board[l])) :
+    N = len(board)
+    M = len(board[0])
+    for l in range(N) :
+        for c in range(M) :
 
             # RIGHT to LEFT
-            if (c - 2 ) >= 0 :
+            if (c - 2) >= 0 :
                 if is_peg(board[l][c]) and is_peg(board[l][c - 1]) and is_empty(board[l][c - 2]) :
                     addSolutionFound(make_pos(l, c), make_pos(l, c - 2), listSolutionFound)
 
             # LEFT to RIGHT
-            if (c + 2 ) < N :
+            if (c + 2) < M :
                 if is_peg(board[l][c]) and is_peg(board[l][c + 1]) and is_empty(board[l][c + 2]) :
                     addSolutionFound(make_pos(l, c), make_pos(l, c + 2), listSolutionFound)
 
             # BOTTOM to TOP
-            if (l - 2 ) >= 0 :
+            if (l - 2) >= 0 :
                 if is_peg(board[l][c]) and is_peg(board[l - 1][c]) and is_empty(board[l - 2][c]) :
                     addSolutionFound(make_pos(l, c), make_pos(l - 2, c), listSolutionFound)
 
             # TOP to BOTTOM
-            if (l + 2 ) < M :
+            u = len(board)
+            if (l + 2) < N :
                 if is_peg(board[l][c]) and is_peg(board[l + 1][c]) and is_empty(board[l + 2][c]) :
                     addSolutionFound(make_pos(l, c), make_pos(l + 2, c), listSolutionFound)
 
@@ -130,6 +118,7 @@ def addSolutionFound(initialPos, finalPos, listSolutionFound) :
     solutionFound = make_move(initialPos, finalPos)
     listSolutionFound.append(solutionFound)
 
+#TAI List[List[c]]
 def board_perform_move(board, move) :
       new_board = copy.deepcopy(board)
 
@@ -145,6 +134,19 @@ def board_perform_move(board, move) :
       new_board[middle_pos[0]][middle_pos[1]] = c_empty()
 
       return new_board
+
+#TAI boolean
+def isGoalReached(board):
+  #The goal is reached when there is only one peg left on the board
+  count = 0
+  for l in range(len(board)) :
+      for c in range(len(board[0])) :
+          if is_peg(board[l][c]):
+              count += 1
+              if count > 1:
+                return False
+      else: # The count must be 1
+              return True 
 
 main()
 
