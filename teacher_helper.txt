@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 board[0][0] 
 # access of a board element
 
