@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 # Grupo 094: Sérgio Carvalho (81513), Nuno Silva-Pinto ()
 
 import copy
@@ -48,8 +49,8 @@ class sol_state :
 def right_to_left(board, pos):
     l = pos_l(pos)
     c1 = pos_c(pos) # current
-    c2 = c1 + 1     # middce
-    c3 = c2 + 1     # target
+    c2 = c1 - 1     # middce
+    c3 = c2 - 1     # target
     if c3 >= 0 and is_peg(board[l][c2]) and is_empty(board[l][c3]):
         return make_pos(c3, l)
 
@@ -128,13 +129,3 @@ def isGoalReached(board):
               if count > 1:
                 return False
   return True 
-
-def main():
-    game = solitaire([['O','_','_','O','_'], ['O','_','O','_','O'], ['_','O','_','O','_'], ['O','_','O','_','_'], ['_','O','_','_','_']])
-    p = InstrumentedProblem(game)    
-    # XXX missing code here
-    resultBreadthFirstSearch = breadth_first_search(p) 
-    print(resultBreadthFirstSearch.solution())
-    print(resultBreadthFirstSearch.path()[0].state.board)
-
-return main()
