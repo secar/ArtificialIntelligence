@@ -4,8 +4,9 @@ import copy
 from search import (
     Problem, InstrumentedProblem, breadth_first_search, Node
 )
-
-    
+from content import *
+from pos     import *
+from move    import *
 
 class solitaire(Problem) :
  """Models a Solitaire problem as a satisfaction problem.
@@ -33,7 +34,6 @@ class solitaire(Problem) :
     # A primeira resposta é útil.
     raise NotImplementedError
 
-
 class sol_state :
     def __init__(self, board) :
         """The board is a 2 dimensional array whose state is specified by string caracter"""
@@ -45,45 +45,13 @@ class sol_state :
     def __lt__(self, sol_state):
         return sol_state.board < sol_state.board
 
-# TAI content
-def c_peg () :
-    return "O"
-def c_empty () :
-    return "_"
-def c_blocked () :
-    return "X"
-def is_empty (e) :
-    return e == c_empty()
-def is_peg (e) :
-    return e == c_peg()
-def is_blocked (e) :
-    return e == c_blocked ()
-
-# TAI pos
-# Tuplo (l, c)
-def make_pos (l, c) :
-    return (l, c)
-def pos_l (pos) :
-    return pos[0]
-def pos_c (pos) :
-    return pos[1]
-
-# TAI move
-# Lista [p_initial, p_final]
-def make_move (i, f) :
-    return [i, f]
-def move_initial (move) :
-    return move[0]
-def move_final (move) :
-    return move [1]
-
 def right_to_left(board, pos):
     l = pos_l(pos)
     c1 = pos_c(pos) # current
     c2 = c1 + 1     # middce
     c3 = c2 + 1     # target
     if c3 >= 0 and is_peg(board[l][c2]) and is_empty(board[l][c3]):
-	return make_pos(c3, l)
+        return make_pos(c3, l)
 
 def left_to_right(board, pos):
     M = len(board[0])
@@ -92,7 +60,7 @@ def left_to_right(board, pos):
     c2 = c1 + 1     # middle
     c3 = c2 + 1     # target
     if c3 < M and is_peg(board[l][c2]) and is_empty(board[l][c3]):
-	return make_pos(c3, l)
+        return make_pos(c3, l)
 
 def bottom_to_top(board, pos):
     c = pos_c(pos)
@@ -100,7 +68,7 @@ def bottom_to_top(board, pos):
     l2 = l1 - 1     # middle
     l3 = l2 - 1     # target
     if l3 >= 0 and is_peg(board[l2][c]) and is_empty(board[l3][c]):
-	return make_pos(c, l3)
+        return make_pos(c, l3)
 
 def top_to_bottom(board, pos):
     N = len(board)
@@ -109,17 +77,19 @@ def top_to_bottom(board, pos):
     l2 = l1 + 1     # middle
     l3 = l2 + 1     # target
     if l3 < N and is_peg(board[l2][c]) and is_empty(board[l3][c]):
-	return make_pos(c, l3)
+        return make_pos(c, l3)
 
 # TAI board
 # Lista [Lista_l [c]]
 def board_moves (board) :
+    M = len(board[0]) - 1
+    N = len(board) - 1
     listSolutionFound = []
     for l in range(N):
         for c in range(M):
             if not is_peg(board[l][c]):
                 continue
-	    pos = make_pos(l, c)
+            pos = make_pos(l, c)
             for f in left_to_right, right_to_left, bottom_to_top, top_to_bottom:
                 newpos = f(board, pos)
                 if newpos:
@@ -167,4 +137,4 @@ def main():
     print(resultBreadthFirstSearch.solution())
     print(resultBreadthFirstSearch.path()[0].state.board)
 
-main()
+return main()
