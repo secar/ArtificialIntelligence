@@ -149,7 +149,7 @@ def board_perform_move(board, move) :
 
 #TAI boolean
 def isGoalReached(board):
-  #The goal is reached when there is only one peg left on the board
+  '''The goal is reached when there is only one peg left on the board'''
   count = 0
   for l in range(len(board)) :
       for c in range(len(board[0])) :
@@ -157,8 +157,7 @@ def isGoalReached(board):
               count += 1
               if count > 1:
                 return False
-      else: # The count must be 1
-              return True 
+  return True 
 
 def main():
     game = solitaire([['O','_','_','O','_'], ['O','_','O','_','O'], ['_','O','_','O','_'], ['O','_','O','_','_'], ['_','O','_','_','_']])
