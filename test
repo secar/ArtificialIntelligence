@@ -1,12 +1,12 @@
 #!/bin/bash
-for n in {01..28}
+for n in {01..26}
 do
 	dir=tests/test$n
 	[ -d $dir ] || continue
         input=$dir/input
 	co_output=$dir/output
 	my_output=$(mktemp)
-	python3 -i IntelligenceArtificial1.py < $input > $my_output 2> /dev/null
+	python3 -i entrega1.py < $input > $my_output 2> /dev/null
         echo -n "$n: "
         if diff $co_output $my_output > /dev/null
 	then

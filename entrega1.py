@@ -30,13 +30,15 @@ class solitaire(Problem):
         # https://stackoverflow.com/questions/6784269/peg-solitaire-senku-solution-algorithm
         # A primeira resposta e util.
         # Vou usar as duas primeiras heuristicas, com peso de 1/2 cada uma.
-        #n = node.state.n
-        #m = node.state.m
-        #board = node.state.board
-        #sucessor_c = 4 - len(board_moves(board))
-        #peg_c = n * m - board_peg_count(board)
-        #return sucessor_c // 2 + peg_c // 2
-        return 0
+        n = node.state.n
+        m = node.state.m
+        board = node.state.board
+        sucessor_c = 4 - len(board_moves(board)) # the lower the better
+	# Nao sei se estas proximas heuristicas sao admissiveis.
+        # Se conseguires provar que são, diz.
+        #peg_c = n * m - board_peg_count(board) # the lower the better
+        #isolated_c = isolated_peg_count(board) # the lower the better 
+        return sucessor_c# // 3 + peg_c // 3 + isolated_c // 3
 
 class sol_state :
     def __init__(self, board) :
@@ -48,6 +50,8 @@ class sol_state :
         assert self.m > 0
     def __lt__(self, sol_state):
         return sol_state.board < sol_state.board
+    def __gt__(self, sol_state):
+        return sol_state.board > sol_state.board
 
 def right_to_left(board, pos):
     l = pos_l(pos)
@@ -125,6 +129,26 @@ def board_peg_count(board):
             if is_peg(board[l][c]):
                 count += 1
     return count
+
+def isolated_peg_count(board):
+    M = len(board[0])
+    N = len(board)
+    count = 0
+    for l in range(N):
+        for c in range(M):
+            count += is_isolated_peg(board, make_pos(l, c)) 
+    return count
+
+def is_isolated_peg(board, pos):
+   N = len(board)
+   M = len(board[0])
+   l = pos_l(pos)
+   c = pos_c(pos)
+   return is_peg(board[l][c])\
+      and l - 1 <= 0 and is_peg(board[l - 1][c])\
+      and l + 1 > N  and is_peg(board[l + 1][c])\
+      and c + 1 <= 0 and is_peg(board[l][c + 1])\
+      and c - 1 > M  and is_peg(board[l][c - 1]) and 1
 
 #_________________________________PROFESSOR____________________________________
 # TAI content
