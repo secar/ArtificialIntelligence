@@ -37,6 +37,15 @@ class sol_state :
         return isinstance(other, sol_state) and self.board < other.board
     def __gt__(self, other):
         return isinstance(other, sol_state) and self.board > other.board
+    def __eq__(self, other):
+        return isinstance(other, sol_state) and self.board == other.board
+    def __ge__(self, other):
+        return self.__gt__(other) or self.__eq__(other)
+    def __le__(self, other):
+        return self.__lt__(other) or self.__eq__(other)
+    def __hash__(self):
+        flatboard = [pos for line in self.board for pos in line]
+        return hash(tuple(flatboard))
 
 def right_to_left(board, pos):
     l = pos_l(pos)
