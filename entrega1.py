@@ -6,7 +6,7 @@ from search import Problem, InstrumentedProblem, breadth_first_search, Node
 
 class solitaire(Problem):
     """Models a Solitaire problem as a satisfaction problem.
-    A solution cannot have more than 1 peg left on the board."""
+    A solution is reached when only 1 peg is left on the board."""
     def __init__(self, board):
         """The board is a 2 dimensional array/list whose state is specified by string caracter"""
         self.initial = sol_state(board)
@@ -16,42 +16,27 @@ class solitaire(Problem):
         return board_moves(state.board)
  
     def result(self, state, action):
-        new_board = board_perform_move(state.board, action)
-        return sol_state(new_board)
+        return sol_state(board_perform_move(state.board, action))
 
     def goal_test(self, state):
         '''The goal is reached when there is only one peg left on the board'''
-        return board_peg_count(state.board) == 1
+        return state.pegc == 1
 
     def path_cost(self, c, state1, action, state2):
         return c + 1
 
     def h(self, node):
-        # https://stackoverflow.com/questions/6784269/peg-solitaire-senku-solution-algorithm
-        # A primeira resposta e util.
-        # Vou usar as duas primeiras heuristicas, com peso de 1/2 cada uma.
-        n = node.state.n
-        m = node.state.m
-        board = node.state.board
-        sucessor_c = 4 - len(board_moves(board)) # the lower the better
-	# Nao sei se estas proximas heuristicas sao admissiveis.
-        # Se conseguires provar que são, diz.
-        #peg_c = n * m - board_peg_count(board) # the lower the better
-        #isolated_c = isolated_peg_count(board) # the lower the better 
-        return sucessor_c# // 3 + peg_c // 3 + isolated_c // 3
+        return node.state.pegc
 
 class sol_state :
     def __init__(self, board) :
         """The board is a 2 dimensional array whose state is specified by string caracter"""
         self.board = board
-        self.n = len(board)
-        assert self.n > 0
-        self.m = len(board[0])
-        assert self.m > 0
-    def __lt__(self, sol_state):
-        return sol_state.board < sol_state.board
-    def __gt__(self, sol_state):
-        return sol_state.board > sol_state.board
+        self.pegc = board_peg_count(board)
+    def __lt__(self, other):
+        return isinstance(other, sol_state) and self.board < other.board
+    def __gt__(self, other):
+        return isinstance(other, sol_state) and self.board > other.board
 
 def right_to_left(board, pos):
     l = pos_l(pos)
@@ -113,13 +98,12 @@ def board_perform_move(board, move) :
    new_board = copy.deepcopy(board)
    l_middle_pos = (move[0][0] + move[1][0]) // 2
    c_middle_pos = (move[0][1] + move[1][1]) // 2
-   middle_pos = make_pos(l_middle_pos, c_middle_pos)
    #the ball in the original position moves
    new_board[move[0][0]][move[0][1]] = c_empty()
-   #the ball is now in the final position
-   new_board[move[1][0]][move[1][1]] = c_peg()
    #the other ball that was between the positions disapear
-   new_board[middle_pos[0]][middle_pos[1]] = c_empty()
+   new_board[l_middle_pos][c_middle_pos] = c_empty()
+   #THE BALl is now in the final position
+   new_board[move[1][0]][move[1][1]] = c_peg()
    return new_board
 
 def board_peg_count(board):
@@ -145,10 +129,10 @@ def is_isolated_peg(board, pos):
    l = pos_l(pos)
    c = pos_c(pos)
    return is_peg(board[l][c])\
-      and l - 1 <= 0 and is_peg(board[l - 1][c])\
-      and l + 1 > N  and is_peg(board[l + 1][c])\
-      and c + 1 <= 0 and is_peg(board[l][c + 1])\
-      and c - 1 > M  and is_peg(board[l][c - 1]) and 1
+      and (l - 1 < 0 or not is_peg(board[l - 1][c]))\
+      and (l + 1 >= N or not is_peg(board[l + 1][c]))\
+      and (c + 1 >= M or not is_peg(board[l][c + 1]))\
+      and (c - 1 < 0 or not is_peg(board[l][c - 1])) and 1
 
 #_________________________________PROFESSOR____________________________________
 # TAI content
@@ -174,9 +158,9 @@ def move_final (move) :
     return move[1]
 
 # TAI pos: tuplo (l, c)
-def make_pos (l, c) :
+def make_pos (l, c):
     return (l, c)
-def pos_l (pos) :
+def pos_l (pos):
     return pos[0]
 def pos_c (pos) :
     return pos[1]

@@ -108,9 +108,10 @@ class Node:
     def child_node(self, problem, action):
         """[Figure 3.10]"""
         next = problem.result(self.state, action)
-        return Node(next, self, action,
+        node = Node(next, self, action,
                     problem.path_cost(self.path_cost, self.state,
                                       action, next))
+        return node
 
     def solution(self):
         """Return the sequence of actions to go from the root to this node."""
